@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Live Countdown</title>
+
+<style>
+body {
+  margin:0;
+  background:#151041;
+  color:#fff;
+  font-family:Arial, sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+#countdown {
+  display:flex;
+  gap:25px;
+}
+
+.circle {
+  width:100px;
+  height:100px;
+  border:3px solid white;
+  border-radius:50%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  font-weight:bold;
+  font-size:20px;
+}
+
+.label {
+  font-size:12px;
+  opacity:0.7;
+}
+</style>
+
+</head>
+<body>
+
+<div id="countdown">Loading...</div>
+
+<script>
+
+// Using CORS proxy
+const sheetUrl = "https://api.codetabs.com/v1/proxy?quest=" +
+encodeURIComponent(
+"https://docs.google.com/spreadsheets/d/1GW-m2Km6zMZY8Z4-yytL6itq10KKHLXt-zFsLcNTYWw/gviz/tq?tqx=out:json&gid=0"
+);
+
+fetch(sheetUrl)
+.then(response => response.text())
+.then(data => {
+
+    const jsonData = JSON.parse(data.substring(47, data.length - 2));
+    const rows = jsonData.table.rows;
+
+    if(rows.length > 0){
+
+        const day = rows[0].c[0].v;
+        const month = rows[0].c[1].v - 1; // JS months 0-11
+        const year = rows[0].c[2].v;
+
+        // Optional: set time to 9:00 AM
+        const targetDate = new Date(year, month, day, 9, 0, 0).getTime();
+
+        startCountdown(targetDate);
+
+    } else {
+        document.getElementById("countdown").innerHTML =
+            "<h2>No date found</h2>";
+    }
+
+})
+.catch(err => {
+    document.getElementById("countdown").innerHTML =
+        "<h2>Unable to load sheet</h2>";
+});
+
+
+function startCountdown(targetDate){
+
+    const container = document.getElementById("countdown");
+
+    function update(){
+
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        if(distance <= 0){
+            container.innerHTML = "<h2>Event Started</h2>";
+            return;
+        }
+
+        const days = Math.floor(distance / (1000*60*60*24));
+        const hours = Math.floor((distance / (1000*60*60)) % 24);
+        const minutes = Math.floor((distance / (1000*60)) % 60);
+        const seconds = Math.floor((distance / 1000) % 60);
+
+        container.innerHTML = `
+            <div class="circle">${days}<div class="label">Days</div></div>
+            <div class="circle">${hours}<div class="label">Hours</div></div>
+            <div class="circle">${minutes}<div class="label">Minutes</div></div>
+            <div class="circle">${seconds}<div class="label">Seconds</div></div>
+        `;
+    }
+
+    update();
+    setInterval(update, 1000);
+}
+
+</script>
+
+</body>
+</html>
