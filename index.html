@@ -8,20 +8,23 @@
 html, body {
   margin:0;
   padding:0;
-  background:transparent;   /* ✅ transparent */
+  background:transparent;
   font-family:Arial, sans-serif;
+  height:auto;
 }
 
 #countdown {
   display:flex;
   justify-content:center;
-  gap:25px;
-  padding:20px 0;   /* small spacing */
+  align-items:center;
+  gap:20px;
+  padding:0;              /* ✅ removed extra spacing */
+  margin:0;
 }
 
 .circle {
-  width:100px;
-  height:100px;
+  width:90px;             /* slightly smaller */
+  height:90px;
   border:3px solid #ffffff;
   border-radius:50%;
   display:flex;
@@ -29,19 +32,19 @@ html, body {
   justify-content:center;
   align-items:center;
   font-weight:bold;
-  font-size:20px;
-  color:#ffffff;   /* keep white text */
+  font-size:18px;
+  color:#ffffff;
 }
 
 .label {
-  font-size:12px;
+  font-size:11px;
   opacity:0.8;
 }
 </style>
 </head>
 <body>
 
-<div id="countdown">Loading...</div>
+<div id="countdown"></div>
 
 <script>
 
@@ -61,12 +64,10 @@ fetch(sheetUrl)
     if(rows.length > 0){
 
         const day = rows[0].c[0].v;
-        const month = rows[0].c[1].v - 1; // JS months 0-11
+        const month = rows[0].c[1].v - 1;
         const year = rows[0].c[2].v;
 
-        // Optional: set time to 9:00 AM
         const targetDate = new Date(year, month, day, 9, 0, 0).getTime();
-
         startCountdown(targetDate);
 
     } else {
@@ -79,7 +80,6 @@ fetch(sheetUrl)
     document.getElementById("countdown").innerHTML =
         "<h2>Unable to load sheet</h2>";
 });
-
 
 function startCountdown(targetDate){
 
