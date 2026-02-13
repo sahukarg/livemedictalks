@@ -6,9 +6,10 @@
 
 <style>
 html, body {
-  margin: 0;
-  padding: 0;
-  background: transparent;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  overflow: hidden;
   font-family: Arial, sans-serif;
 }
 
@@ -19,13 +20,17 @@ html, body {
   align-items: center;
   gap: 20px;
   padding: 0;
-  flex-wrap: nowrap;
+  margin: 0;
+  background: transparent;
 }
 
-/* Perfect circle */
+/* Perfect circle (NO OVAL EVER) */
 .circle {
-  width: 90px;
-  aspect-ratio: 1 / 1;     /* ✅ Always perfect circle */
+  flex: 0 0 auto;              /* prevent flex shrink */
+  width: 80px;
+  height: 80px;
+  min-width: 80px;
+  min-height: 80px;
   border: 3px solid #ffffff;
   border-radius: 50%;
   display: flex;
@@ -33,17 +38,17 @@ html, body {
   justify-content: center;
   align-items: center;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 16px;
   color: #ffffff;
   box-sizing: border-box;
 }
 
 .label {
-  font-size: 11px;
+  font-size: 10px;
   opacity: 0.8;
 }
 
-/* 📱 Mobile optimization */
+/* Mobile fix */
 @media (max-width: 480px) {
 
   #countdown {
@@ -51,7 +56,10 @@ html, body {
   }
 
   .circle {
-    width: 65px;
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    min-height: 60px;
     font-size: 14px;
   }
 
@@ -59,16 +67,16 @@ html, body {
     font-size: 9px;
   }
 }
-
 </style>
 </head>
+
 <body>
 
 <div id="countdown"></div>
 
 <script>
 
-// Using CORS proxy
+// Google Sheet via proxy
 const sheetUrl = "https://api.codetabs.com/v1/proxy?quest=" +
 encodeURIComponent(
 "https://docs.google.com/spreadsheets/d/1GW-m2Km6zMZY8Z4-yytL6itq10KKHLXt-zFsLcNTYWw/gviz/tq?tqx=out:json&gid=0"
@@ -92,13 +100,13 @@ fetch(sheetUrl)
 
     } else {
         document.getElementById("countdown").innerHTML =
-            "<h2>No date found</h2>";
+            "<h2 style='color:white;'>No date found</h2>";
     }
 
 })
 .catch(err => {
     document.getElementById("countdown").innerHTML =
-        "<h2>Unable to load sheet</h2>";
+        "<h2 style='color:white;'>Unable to load sheet</h2>";
 });
 
 function startCountdown(targetDate){
@@ -111,7 +119,7 @@ function startCountdown(targetDate){
         const distance = targetDate - now;
 
         if(distance <= 0){
-            container.innerHTML = "<h2>Event Started</h2>";
+            container.innerHTML = "<h2 style='color:white;'>Event Started</h2>";
             return;
         }
 
