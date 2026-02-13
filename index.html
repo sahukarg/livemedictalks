@@ -6,40 +6,60 @@
 
 <style>
 html, body {
-  margin:0;
-  padding:0;
-  background:transparent;
-  font-family:Arial, sans-serif;
-  height:auto;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  font-family: Arial, sans-serif;
 }
 
+/* Countdown container */
 #countdown {
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:20px;
-  padding:0;              /* ✅ removed extra spacing */
-  margin:0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 0;
+  flex-wrap: nowrap;
 }
 
+/* Perfect circle */
 .circle {
-  width:90px;             /* slightly smaller */
-  height:90px;
-  border:3px solid #ffffff;
-  border-radius:50%;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  font-weight:bold;
-  font-size:18px;
-  color:#ffffff;
+  width: 90px;
+  aspect-ratio: 1 / 1;     /* ✅ Always perfect circle */
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 18px;
+  color: #ffffff;
+  box-sizing: border-box;
 }
 
 .label {
-  font-size:11px;
-  opacity:0.8;
+  font-size: 11px;
+  opacity: 0.8;
 }
+
+/* 📱 Mobile optimization */
+@media (max-width: 480px) {
+
+  #countdown {
+    gap: 10px;
+  }
+
+  .circle {
+    width: 65px;
+    font-size: 14px;
+  }
+
+  .label {
+    font-size: 9px;
+  }
+}
+
 </style>
 </head>
 <body>
